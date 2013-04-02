@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'torkify/pass_event'
+require 'torkify/pass_or_fail_event'
 
 module Torkify
-  describe PassEvent do
+  describe PassOrFailEvent do
 
     context "with typical seed data" do
       before do
@@ -13,7 +13,7 @@ module Torkify
         @exit_code = 2
         @exit_info = 'exit info'
 
-        @file_event = PassEvent.new(@file, @lines, @log_file, @worker, @exit_code, @exit_info)
+        @file_event = PassOrFailEvent.new(@file, @lines, @log_file, @worker, @exit_code, @exit_info)
       end
 
       its(:file) { @file }

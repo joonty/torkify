@@ -1,5 +1,6 @@
 require "torkify/version"
 
 module Torkify
-  # Your code goes here...
+  require 'torkify/exceptions'
+  require 'torkify/event'
 end

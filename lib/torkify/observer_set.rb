@@ -6,6 +6,12 @@ module Torkify
       @set = Set.new
     end
 
+    def dispatch(event)
+      @set.each do |observer|
+        observer.send event.type.to_sym, event
+      end
+    end
+
     def method_missing(name, *args)
       @set.send name, *args
     end

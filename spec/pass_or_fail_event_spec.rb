@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'torkify/pass_or_fail_event'
 
 module Torkify
   describe PassOrFailEvent do

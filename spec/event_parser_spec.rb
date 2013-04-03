@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'torkify/event_parser'
-require 'torkify/test_event'
 
 module Torkify
   describe EventParser do

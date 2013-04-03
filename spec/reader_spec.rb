@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'torkify/reader'
 
 module Torkify
   describe Reader do

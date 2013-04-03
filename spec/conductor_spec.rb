@@ -1,11 +1,10 @@
 require 'spec_helper'
-require 'torkify/conductor'
-require 'torkify/reader'
 
 module Torkify
   describe Conductor do
     before do
-      @conductor = Conductor.new double("Torkify::Reader")
+      @reader = double("Torkify::Reader")
+      @conductor = Conductor.new @reader
     end
 
     subject { @conductor }
@@ -23,6 +22,13 @@ module Torkify
       subject { @conductor.observers.first }
 
       it { should equal @observer }
+    end
+
+    context "when start is called" do
+      it "should call each_line on reader" do
+        @reader.should_receive(:each_line)
+        @conductor.start
+      end
     end
   end
 end

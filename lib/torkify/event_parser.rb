@@ -4,11 +4,15 @@ module Torkify
   class EventParser
     def parse(line)
       raw = JSON.load line
-      klazz = class_from_type raw.first
-      klazz.new(*raw)
+      event_from_data raw
     end
 
     protected
+    def event_from_data(data)
+      klazz = class_from_type data.first
+      klazz.new(*data)
+    end
+
     def class_from_type(type)
       case type
       when 'test'

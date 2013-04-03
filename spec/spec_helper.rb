@@ -1,10 +1,3 @@
 require 'rspec'
 require 'torkify'
-require 'torkify/reader'
-require 'torkify/exceptions'
-require 'torkify/event_parser'
-require 'torkify/conductor'
-require 'torkify/test_event'
-require 'torkify/pass_or_fail_event'
-require 'torkify/status_change_event'
-require 'torkify/observer_set'
+Torkify.load_files

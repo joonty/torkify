@@ -19,6 +19,8 @@ module Torkify
         TestEvent
       when /(pass|fail)/
         PassOrFailEvent
+      else
+        Event
       end
     end
   end

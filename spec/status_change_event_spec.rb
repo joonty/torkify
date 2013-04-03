@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'torkify/status_change_event'
 
 module Torkify
   describe StatusChangeEvent do

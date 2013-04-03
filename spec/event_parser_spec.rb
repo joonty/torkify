@@ -72,5 +72,29 @@ module Torkify
       its(:exit_code) { should == 256 }
       its(:pid)       { should == 23318 }
     end
+
+    context "when calling parse on an absorb event line" do
+      before do
+        line = '["absorb"]'
+        @event = @parser.parse line
+      end
+
+      subject { @event }
+
+      it { should be_an Event }
+      its(:type) { should == 'absorb' }
+    end
+
+    context "when calling parse on an unknown event type" do
+      before do
+        line = '["random"]'
+        @event = @parser.parse line
+      end
+
+      subject { @event }
+
+      it { should be_an Event }
+      its(:type) { should == 'random' }
+    end
   end
 end

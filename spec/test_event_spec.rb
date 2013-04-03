@@ -15,11 +15,11 @@ module Torkify
 
       subject { @file_event }
 
-      its(:type) { should == @type }
-      its(:file) { should == @file }
-      its(:lines) { should == @lines }
+      its(:type)     { should == @type }
+      its(:file)     { should == @file }
+      its(:lines)    { should == @lines }
       its(:log_file) { should == @log_file }
-      its(:worker) { should == @worker }
+      its(:worker)   { should == @worker }
     end
   end
 end

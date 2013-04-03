@@ -10,12 +10,12 @@ module Torkify
     # A TorkError is raised if the command fails, and its message is whatever
     # has been written to the command's STDERR stream.
     def initialize(command = 'tork-remote tork-engine', run_in_dir = Dir.pwd)
-      Dir.chdir(run_in_dir)
+      Dir.chdir(run_in_dir) do
+        _, @io, stderr, _ = Open3.popen3 command
 
-      _, @io, stderr, _ = Open3.popen3 command
-
-      if @io.eof?
-        raise TorkError, stderr.read.strip
+        if @io.eof?
+          raise TorkError, stderr.read.strip
+        end
       end
     end
 
@@ -23,7 +23,7 @@ module Torkify
     #
     # This allows this class to be used in an IO like way.
     def method_missing(method, *args, &blk)
-      @io.send(method, *args, &blk)
+      @io.send method, *args, &blk
     end
 
     # Allow respond_to? to work with method_missing.

@@ -42,7 +42,7 @@ module Torkify
     context "with command that writes to standard error" do
       it "should raise TorkError" do
         err = 'Command error'
-        expect { Reader.new("echo '#{err}' >&2") }.to raise_exception(TorkError, err)
+        expect { Reader.new "echo '#{err}' >&2" }.to raise_exception(TorkError, err)
       end
     end
 

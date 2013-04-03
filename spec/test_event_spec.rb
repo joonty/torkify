@@ -1,18 +1,20 @@
 require 'spec_helper'
-require 'torkify/file_event'
+require 'torkify/test_event'
 
 module Torkify
-  describe FileEvent do
+  describe TestEvent do
 
     context "with typical seed data" do
       before do
+        @type = 'test'
         @file = 'file'
         @lines = []
         @log_file = 'log_file'
         @worker = 1
-        @file_event = FileEvent.new(@file, @lines, @log_file, @worker)
+        @file_event = TestEvent.new(@test, @lines, @log_file, @worker)
       end
 
+      its(:type) { @test }
       its(:file) { @file }
       its(:lines) { @lines }
       its(:log_file) { @log_file }

@@ -9,7 +9,6 @@ module Torkify
 
     subject { @conductor }
 
-    it { should respond_to :add_observer }
     it { should respond_to :observers }
     it { should respond_to :start }
 

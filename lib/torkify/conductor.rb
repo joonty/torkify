@@ -2,13 +2,9 @@ module Torkify
   class Conductor
     attr_reader :observers
 
-    def initialize(reader)
+    def initialize(reader, observers)
       @reader = reader
-      @observers = []
-    end
-
-    def add_observer(observer)
-      @observers << observer
+      @observers = observers
     end
 
     def start
@@ -21,7 +17,8 @@ module Torkify
 
     protected
     def dispatch(event)
-      @observers.each { |o| o.send event.type.to_sym, event }
+      puts "Event: #{event.inspect}"
+      @observers.dispatch(event)
     end
   end
 end

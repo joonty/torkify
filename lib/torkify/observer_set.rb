@@ -8,16 +8,21 @@ module Torkify
 
     def dispatch(event)
       @set.each do |observer|
-        observer.send event.type.to_sym, event
+        begin
+          message = "on_#{event.type}"
+          observer.send message.to_sym, event
+        rescue NoMethodError => e
+          puts "Warning: #{e.message}"
+        end
       end
     end
 
-    def method_missing(name, *args)
-      @set.send name, *args
+    def method_missing(method, *args, &blk)
+      @set.send method, *args, &blk
     end
 
-    def respond_to?(name)
-      @set.respond_to? name
+    def respond_to?(name, include_private = false)
+      @set.respond_to? name, include_private
     end
   end
 end

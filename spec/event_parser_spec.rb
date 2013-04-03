@@ -40,19 +40,39 @@ module Torkify
 
     context "when calling parse on a pass event line" do
       before do
-        line = '["pass","spec/event_parser_spec.rb",[27],"spec/event_parser_spec.rb.log",1,0,"#<Process::Status: pid 27490 exit 0>"]'
+        line = '["pass","spec/pass_spec.rb",[27],"spec/pass_spec.rb.log",1,0,"#<Process::Status: pid 27490 exit 0>"]'
         @event = @parser.parse line
       end
 
       subject { @event }
 
       it { should be_a PassOrFailEvent }
-      its(:file)      { should == 'spec/event_parser_spec.rb' }
+      its(:type)      { should == 'pass' }
+      its(:file)      { should == 'spec/pass_spec.rb' }
       its(:lines)     { should == [27] }
-      its(:log_file)  { should == 'spec/event_parser_spec.rb.log' }
+      its(:log_file)  { should == 'spec/pass_spec.rb.log' }
       its(:worker)    { should == 1 }
       its(:exit_code) { should == 0 }
       its(:pid)       { should == 27490 }
+    end
+
+    context "when calling parse on a fail event line" do
+      before do
+
+        line = '["fail","spec/fail_spec.rb",[],"spec/fail_spec.rb.log",1,256,"#<Process::Status: pid 23318 exit 1>"]'
+        @event = @parser.parse line
+      end
+
+      subject { @event }
+
+      it { should be_a PassOrFailEvent }
+      its(:type)      { should == 'fail' }
+      its(:file)      { should == 'spec/fail_spec.rb' }
+      its(:lines)     { should == [] }
+      its(:log_file)  { should == 'spec/fail_spec.rb.log' }
+      its(:worker)    { should == 1 }
+      its(:exit_code) { should == 256 }
+      its(:pid)       { should == 23318 }
     end
   end
 end

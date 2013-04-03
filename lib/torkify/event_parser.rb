@@ -13,7 +13,7 @@ module Torkify
       case type
       when 'test'
         TestEvent
-      when 'pass' || 'fail'
+      when /(pass|fail)/
         PassOrFailEvent
       end
     end

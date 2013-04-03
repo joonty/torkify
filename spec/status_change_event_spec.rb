@@ -9,13 +9,13 @@ module Torkify
         @type = 'pass_now_fail'
         @file = 'file'
         @inner_event = PassOrFailEvent.new(*(1..7))
-        @event = StatusChangeEvent.new(@test, @lines, @inner_event)
+        @event = StatusChangeEvent.new(@test, @file, @inner_event)
       end
 
       subject { @event }
 
-      its(:type) { should == @test }
-      its(:file) { should == @file }
+      its(:type)  { should == @test }
+      its(:file)  { should == @file }
       its(:event) { should == @inner_event }
     end
   end

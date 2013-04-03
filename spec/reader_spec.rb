@@ -16,26 +16,26 @@ module Torkify
       before { @reader = Reader.new 'echo "Line 1\nLine 2"' }
 
       context "first line" do
-        subject { @reader.readline }
-        it { should == "Line 1\n" }
+        subject { @reader.readline.strip }
+        it { should == "Line 1" }
       end
 
       context "second line" do
         before { @reader.readline }
-        subject { @reader.readline }
+        subject { @reader.readline.strip }
 
-        it { should == "Line 2\n" }
+        it { should == "Line 2" }
       end
 
       context "each over line" do
         before do
-          @output = ''
-          @reader.each_line { |line| @output += line }
+          @output = []
+          @reader.each_line { |line| @output << line.strip }
         end
 
         subject { @output }
 
-        it { should == "Line 1\nLine 2\n" }
+        it { should == ["Line 1", "Line 2"] }
       end
     end
 
@@ -44,6 +44,15 @@ module Torkify
         err = 'Command error'
         expect { Reader.new("echo '#{err}' >&2") }.to raise_exception(TorkError, err)
       end
+    end
+
+    context "with a working directory" do
+      before do
+        @reader = Reader.new 'echo $PWD', '/usr'
+      end
+      subject { @reader.read.strip }
+
+      it { should == '/usr' }
     end
   end
 end

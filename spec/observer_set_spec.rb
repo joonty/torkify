@@ -2,21 +2,35 @@ require 'spec_helper'
 
 module Torkify
   describe ObserverSet do
-    before do
-      @set = ObserverSet.new
-    end
+    before { @set = ObserverSet.new }
     subject { @set }
 
     it { should respond_to :length }
     it { should respond_to :add }
+    it { should respond_to :<< }
+    it { should respond_to :| }
 
     context "when empty" do
       its(:length) { should == 0 }
     end
 
+    context "when calling union with an array" do
+      before { @set |= [1, 3] }
+
+      it           { should be_a ObserverSet }
+      its(:length) { should == 2 }
+      its(:to_a)   { should == [1, 3] }
+    end
+
+    context "when adding an array" do
+      before { @set += [1, 3, 10] }
+
+      it           { should be_a ObserverSet }
+      its(:length) { should == 3 }
+    end
+
     context "when it contains one observer" do
       before do
-        @set = ObserverSet.new
         @observer = Object.new
         @set.add @observer
       end
@@ -42,12 +56,7 @@ module Torkify
     end
 
     context "when it contains multiple observers" do
-      before do
-        @set = ObserverSet.new
-        @set.add double
-        @set.add double
-        @set.add double
-      end
+      before { @set += [double, double, double] }
 
       its(:length) { should == 3 }
 
@@ -61,7 +70,6 @@ module Torkify
 
     context "when trying to add the same object twice" do
       before do
-        @set = ObserverSet.new
         object = double
         @set.add object
         @set.add object

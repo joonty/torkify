@@ -1,6 +1,6 @@
 module Torkify
   class Conductor
-    attr_reader :observers
+    attr_accessor :observers
 
     def initialize(reader, observers)
       @reader = reader

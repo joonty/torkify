@@ -32,22 +32,15 @@ module Torkify
         @conductor.start
       end
 
-      # TODO tidy this up
       context "with dummy input" do
         before do
-          def @reader.each_line
-            lines = ['["test","spec/status_change_event_spec.rb",[],"spec/status_change_event_spec.rb.log",0]']
-            lines.each { |l| yield l }
-          end
-          @obs1 = double
-          @obs2 = double
-          @observers.add @obs1
-          @observers.add @obs2
+          line = '["test","spec/status_change_event_spec.rb",[],"spec/status_change_event_spec.rb.log",0]'
+          @reader.should_receive(:each_line).and_yield(line)
+          @conductor.observers += [double, double]
         end
 
         it "should notify each observer" do
-          @obs1.should_receive(:on_test)
-          @obs2.should_receive(:on_test)
+          @conductor.observers.each { |o| o.should_receive(:on_test) }
           @conductor.start
         end
       end

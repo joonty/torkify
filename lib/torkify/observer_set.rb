@@ -2,8 +2,8 @@ module Torkify
   require 'set'
 
   class ObserverSet
-    def initialize
-      @set = Set.new
+    def initialize(set = Set.new)
+      @set = set
     end
 
     def dispatch(event)
@@ -17,6 +17,10 @@ module Torkify
       end
     end
 
+    def |(enum)
+      self.class.new(@set |= enum)
+    end
+
     def method_missing(method, *args, &blk)
       @set.send method, *args, &blk
     end
@@ -24,5 +28,8 @@ module Torkify
     def respond_to?(name, include_private = false)
       @set.respond_to? name, include_private
     end
+
+    alias :+ :|
+    alias :union :|
   end
 end

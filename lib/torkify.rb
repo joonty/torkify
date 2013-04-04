@@ -2,12 +2,20 @@ require "torkify/version"
 
 module Torkify
     class Observer
+      def on_start
+        puts "Starting"
+      end
+
       def on_pass(event)
         puts event.inspect
       end
 
       def on_fail(event)
         puts event.inspect
+      end
+
+      def on_stop
+        puts "Stopping"
       end
     end
 
@@ -26,13 +34,16 @@ module Torkify
   def self.start
     self.load_files
 
-    logger.debug { "Starting torkify" }
-
     observers = ObserverSet.new
     observers << Observer.new
+
+    Torkify.logger.info { 'Started torkify' }
+
     reader = Reader.new
     conductor = Conductor.new reader, observers
     conductor.start
+
+    Torkify.logger.info { 'Stopping torkify' }
   end
 
   def self.load_files

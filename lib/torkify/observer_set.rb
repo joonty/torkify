@@ -7,14 +7,10 @@ module Torkify
     end
 
     def dispatch(event)
-      Torkify.logger.debug "Received event: #{event.inspect}"
+      Torkify.logger.debug event.to_s
+      message = "on_#{event.type}".to_sym
       @set.each do |observer|
-        begin
-          message = "on_#{event.type}"
-          observer.send message.to_sym, event
-        rescue NoMethodError => e
-          Torkify.logger.warn { e.message }
-        end
+        dispatch_each observer, message, event
       end
     end
 
@@ -32,5 +28,23 @@ module Torkify
 
     alias :+ :|
     alias :union :|
+
+    private
+    def dispatch_each(observer, message, event)
+      method = observer.method(message)
+      observer.send message, *method_args(method, event)
+    rescue NameError
+      Torkify.logger.warn { "No method #{message} defined on #{observer.inspect}" }
+    rescue => e
+      Torkify.logger.error { "Caught exception from #{observer} during ##{message}: #{e}" }
+    end
+
+    def method_args(method, event)
+      dispatch_args = []
+      unless method.arity === 0
+        dispatch_args << event
+      end
+      dispatch_args
+    end
   end
 end

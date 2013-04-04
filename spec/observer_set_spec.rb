@@ -53,6 +53,18 @@ module Torkify
         event = Torkify::PassOrFailEvent.new 'fail', *(1..6)
         expect { @set.dispatch(event) }.not_to raise_error
       end
+
+      it "should not raise an error on dispatch to method with wrong number of parameters" do
+        event = Torkify::PassOrFailEvent.new 'fail', *(1..6)
+        def @observer.on_fail; end
+        expect { @set.dispatch(event) }.not_to raise_error
+      end
+
+      it "should not raise an error on dispatch to method that raises an exception" do
+        event = Torkify::PassOrFailEvent.new 'fail', *(1..6)
+        @observer.should_receive(:on_fail).and_raise(RuntimeError)
+        expect { @set.dispatch(event) }.not_to raise_error
+      end
     end
 
     context "when it contains multiple observers" do

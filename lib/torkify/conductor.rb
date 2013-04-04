@@ -8,6 +8,7 @@ module Torkify
     end
 
     def start
+      Torkify.logger.info { 'Started torkify' }
       dispatch Event.new 'start'
       parser = EventParser.new
       @reader.each_line do |line|
@@ -15,6 +16,7 @@ module Torkify
         dispatch event
       end
       dispatch Event.new 'stop'
+      Torkify.logger.info { 'Stopped torkify' }
     end
 
     protected

@@ -4,5 +4,10 @@ module Torkify
       matched = exit_info.scan(/pid ([0-9]+)/).first
       matched.first.to_i if matched
     end
+
+    def to_s
+      s = "#{type.upcase} #{file}"
+      s += lines.any? ? " (lines #{lines.join(', ')})" : ''
+    end
   end
 end

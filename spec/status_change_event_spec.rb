@@ -8,14 +8,15 @@ module Torkify
         @type = 'pass_now_fail'
         @file = 'file'
         @inner_event = PassOrFailEvent.new(*(1..7))
-        @event = StatusChangeEvent.new(@test, @file, @inner_event)
+        @event = StatusChangeEvent.new(@type, @file, @inner_event)
       end
 
       subject { @event }
 
-      its(:type)  { should == @test }
+      its(:type)  { should == @type }
       its(:file)  { should == @file }
       its(:event) { should == @inner_event }
+      its(:to_s)  { should == 'PASS NOW FAIL file' }
     end
 
     context "with a fail_now_pass event" do
@@ -23,14 +24,15 @@ module Torkify
         @type = 'fail_now_pass'
         @file = 'file'
         @inner_event = PassOrFailEvent.new(*(1..7))
-        @event = StatusChangeEvent.new(@test, @file, @inner_event)
+        @event = StatusChangeEvent.new(@type, @file, @inner_event)
       end
 
       subject { @event }
 
-      its(:type)  { should == @test }
+      its(:type)  { should == @type }
       its(:file)  { should == @file }
       its(:event) { should == @inner_event }
+      its(:to_s)  { should == 'FAIL NOW PASS file' }
     end
   end
 end

@@ -12,17 +12,15 @@ module Torkify
         @worker = 1
         @exit_code = 2
         @exit_info = 'exit info'
-
-        @event = PassOrFailEvent.new @type,
-                                     @file,
-                                     @lines,
-                                     @log_file,
-                                     @worker,
-                                     @exit_code,
-                                     @exit_info
       end
 
-      subject { @event }
+      subject { @event = PassOrFailEvent.new @type,
+                                             @file,
+                                             @lines,
+                                             @log_file,
+                                             @worker,
+                                             @exit_code,
+                                             @exit_info }
 
       its(:type)      { should == @type }
       its(:file)      { should == @file }
@@ -31,6 +29,15 @@ module Torkify
       its(:worker)    { should == @worker }
       its(:exit_code) { should == @exit_code }
       its(:exit_info) { should == @exit_info }
+      its(:to_s)      { should == "PASS file" }
+
+      context "and line numbers" do
+        before do
+          @lines = [1, 14, 23]
+        end
+
+        its(:to_s)      { should == "PASS file (lines 1, 14, 23)" }
+      end
     end
 
     context "with a process status string" do

@@ -10,6 +10,7 @@ module Torkify
       subject { @event }
 
       its(:type) { should == 'absorb' }
+      its(:to_s) { should == 'absorb' }
     end
   end
 end

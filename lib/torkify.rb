@@ -18,7 +18,7 @@ module Torkify
 
   # Create a listener object and load all required files.
   def self.listener(*args)
-    load_files
+    require 'torkify/listener'
     Listener.new(*args)
   end
 

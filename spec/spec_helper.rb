@@ -1,3 +1,3 @@
 require 'rspec'
 require 'torkify'
-Torkify.load_files
+Torkify.logger.level = Log4r::FATAL

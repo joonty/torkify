@@ -1,3 +1,8 @@
+require_relative 'conductor'
+require_relative 'observer_set'
+require_relative 'reader'
+require_relative 'exceptions'
+
 module Torkify
   class Listener
     # Create a torkify listener with optional command and directory specified.

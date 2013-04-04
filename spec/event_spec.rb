@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'torkify/events/event'
 
 module Torkify
   describe Event do

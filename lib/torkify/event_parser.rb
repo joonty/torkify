@@ -1,6 +1,9 @@
-module Torkify
-  require 'json'
+require 'json'
+require_relative 'events/test_event'
+require_relative 'events/pass_or_fail_event'
+require_relative 'events/event'
 
+module Torkify
   class EventParser
     def parse(line)
       raw = JSON.load line

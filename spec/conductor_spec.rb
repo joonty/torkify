@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'torkify/conductor'
+require 'torkify/observer_set'
 
 module Torkify
   describe Conductor do

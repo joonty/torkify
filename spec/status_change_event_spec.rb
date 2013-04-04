@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'torkify/events/status_change_event'
+require 'torkify/events/pass_or_fail_event'
 
 module Torkify
   describe StatusChangeEvent do

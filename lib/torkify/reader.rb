@@ -1,6 +1,7 @@
-module Torkify
-  require 'open3'
+require 'open3'
+require_relative 'exceptions'
 
+module Torkify
   class Reader
     # Open the tork command and initialize the streams.
     #

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'torkify/events/test_event'
 
 module Torkify
   describe TestEvent do

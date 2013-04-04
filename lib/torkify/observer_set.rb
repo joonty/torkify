@@ -1,6 +1,6 @@
-module Torkify
-  require 'set'
+require 'set'
 
+module Torkify
   class ObserverSet
     def initialize(set = Set.new)
       @set = set

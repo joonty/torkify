@@ -1,4 +1,7 @@
 require 'spec_helper'
+require 'torkify/observer_set'
+require 'torkify/events/test_event'
+require 'torkify/events/pass_or_fail_event'
 
 module Torkify
   describe ObserverSet do

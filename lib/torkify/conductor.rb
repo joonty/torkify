@@ -1,3 +1,6 @@
+require_relative 'events/event'
+require_relative 'event_parser'
+
 module Torkify
   class Conductor
     attr_accessor :observers

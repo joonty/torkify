@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'torkify/listener'
 
 module Torkify
   describe Listener do

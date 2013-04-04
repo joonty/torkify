@@ -97,5 +97,58 @@ module Torkify
       it { should be_an Event }
       its(:type) { should == 'random' }
     end
+
+    context "when calling parse on a pass now fail event line" do
+      before do
+        line = '["pass_now_fail","spec/status_change_spec.rb",["fail","spec/status_change_spec.rb",[68],"spec/status_change_spec.rb.log",2,256,"#<Process::Status: pid 23819 exit 1>"]]'
+        @event = @parser.parse line
+      end
+
+      subject { @event }
+
+      it { should be_a StatusChangeEvent }
+      its(:type)      { should == 'pass_now_fail' }
+      its(:file)      { should == 'spec/status_change_spec.rb' }
+      its(:event)     { should be_a PassOrFailEvent }
+
+      context "and getting the inner event" do
+        subject { @event.event }
+
+        its(:type)      { should == 'fail' }
+        its(:file)      { should == 'spec/status_change_spec.rb' }
+        its(:log_file)  { should == 'spec/status_change_spec.rb.log' }
+        its(:lines)     { should == [68] }
+        its(:worker)    { should == 2 }
+        its(:exit_code) { should == 256 }
+        its(:pid)       { should == 23819 }
+      end
+    end
+
+    context "when calling parse on a fail now pass event line" do
+      before do
+        line = '["fail_now_pass","spec/status_change_spec.rb",["pass","spec/status_change_spec.rb",[],"spec/status_change_spec.rb.log",1,0,"#<Process::Status: pid 677 exit 0>"]]'
+        @event = @parser.parse line
+      end
+
+      subject { @event }
+
+      it { should be_a StatusChangeEvent }
+      its(:type)      { should == 'fail_now_pass' }
+      its(:file)      { should == 'spec/status_change_spec.rb' }
+      its(:event)     { should be_a PassOrFailEvent }
+
+      context "and getting the inner event" do
+        subject { @event.event }
+
+        its(:type)      { should == 'pass' }
+        its(:file)      { should == 'spec/status_change_spec.rb' }
+        its(:log_file)  { should == 'spec/status_change_spec.rb.log' }
+        its(:lines)     { should == [] }
+        its(:worker)    { should == 1 }
+        its(:exit_code) { should == 0 }
+        its(:pid)       { should == 677 }
+      end
+    end
+
   end
 end

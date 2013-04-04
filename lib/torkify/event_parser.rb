@@ -1,7 +1,8 @@
 require 'json'
+require_relative 'events/event'
 require_relative 'events/test_event'
 require_relative 'events/pass_or_fail_event'
-require_relative 'events/event'
+require_relative 'events/status_change_event'
 
 module Torkify
   class EventParser
@@ -12,18 +13,15 @@ module Torkify
 
     protected
     def event_from_data(data)
-      klazz = class_from_type data.first
-      klazz.new(*data)
-    end
-
-    def class_from_type(type)
-      case type
+      case data.first
       when 'test'
-        TestEvent
-      when /(pass|fail)/
-        PassOrFailEvent
+        TestEvent.new(*data)
+      when /^(pass|fail)$/
+        PassOrFailEvent.new(*data)
+      when /^(pass_now_fail|fail_now_pass)$/
+        StatusChangeEvent.new(data[0], data[1], event_from_data(data[2]))
       else
-        Event
+        Event.new(*data)
       end
     end
   end

@@ -8,16 +8,17 @@ module Torkify
     end
 
     def start
+      dispatch Event.new 'start'
       parser = EventParser.new
       @reader.each_line do |line|
         event = parser.parse line
         dispatch event
       end
+      dispatch Event.new 'stop'
     end
 
     protected
     def dispatch(event)
-      puts "Event: #{event.inspect}"
       @observers.dispatch(event)
     end
   end

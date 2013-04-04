@@ -27,22 +27,34 @@ module Torkify
     end
 
     context "when start is called" do
-      it "should call each_line on reader" do
+      before do
         @reader.should_receive(:each_line)
-        @conductor.start
+        @conductor.observers += [double, double]
+        @conductor.observers.each do |o|
+          o.should_receive(:on_start)
+          o.should_receive(:on_stop)
+        end
       end
 
-      context "with dummy input" do
-        before do
-          line = '["test","spec/status_change_event_spec.rb",[],"spec/status_change_event_spec.rb.log",0]'
-          @reader.should_receive(:each_line).and_yield(line)
-          @conductor.observers += [double, double]
-        end
+      it "should call start and stop on each observer and each_line on reader" do
+        @conductor.start
+      end
+    end
 
-        it "should notify each observer" do
-          @conductor.observers.each { |o| o.should_receive(:on_test) }
-          @conductor.start
+    context "when start is called with dummy input" do
+      before do
+        line = '["test","spec/status_change_event_spec.rb",[],"spec/status_change_event_spec.rb.log",0]'
+        @reader.should_receive(:each_line).and_yield(line)
+        @conductor.observers += [double, double]
+      end
+
+      it "should notify each observer about the test event" do
+        @conductor.observers.each do |o|
+          o.should_receive(:on_start)
+          o.should_receive(:on_test)
+          o.should_receive(:on_stop)
         end
+        @conductor.start
       end
     end
   end

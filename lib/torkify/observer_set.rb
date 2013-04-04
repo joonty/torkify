@@ -7,18 +7,19 @@ module Torkify
     end
 
     def dispatch(event)
+      Torkify.logger.debug "Received event: #{event.inspect}"
       @set.each do |observer|
         begin
           message = "on_#{event.type}"
           observer.send message.to_sym, event
         rescue NoMethodError => e
-          puts "Warning: #{e.message}"
+          Torkify.logger.warn { e.message }
         end
       end
     end
 
     def |(enum)
-      self.class.new(@set |= enum)
+      self.class.new(@set | enum)
     end
 
     def method_missing(method, *args, &blk)

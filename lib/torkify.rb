@@ -11,8 +11,23 @@ module Torkify
       end
     end
 
+  def self.logger
+    require 'log4r'
+    include Log4r
+
+    log = Logger['torkify']
+    unless log
+      log = Logger.new 'torkify'
+      log.outputters = Outputter.stdout
+    end
+    log
+  end
+
   def self.start
     self.load_files
+
+    logger.debug { "Starting torkify" }
+
     observers = ObserverSet.new
     observers << Observer.new
     reader = Reader.new

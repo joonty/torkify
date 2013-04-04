@@ -3,9 +3,9 @@ require 'spec_helper'
 module Torkify
   describe Conductor do
     before do
-      @reader = double("Torkify::Reader")
+      @reader = double
       @observers = Torkify::ObserverSet.new
-      @conductor = Conductor.new @reader, @observers
+      @conductor = Conductor.new @observers
     end
 
     subject { @conductor }
@@ -28,7 +28,6 @@ module Torkify
 
     context "when start is called" do
       before do
-        @reader.should_receive(:each_line)
         @conductor.observers += [double, double]
         @conductor.observers.each do |o|
           o.should_receive(:on_start)
@@ -37,7 +36,8 @@ module Torkify
       end
 
       it "should call start and stop on each observer and each_line on reader" do
-        @conductor.start
+        @reader.should_receive(:each_line)
+        @conductor.start @reader
       end
     end
 
@@ -54,7 +54,7 @@ module Torkify
           o.should_receive(:on_test)
           o.should_receive(:on_stop)
         end
-        @conductor.start
+        @conductor.start @reader
       end
     end
   end

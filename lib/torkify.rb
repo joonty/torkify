@@ -1,24 +1,6 @@
 require "torkify/version"
 
 module Torkify
-    class Observer
-      def on_start
-        puts "Starting"
-      end
-
-      def on_pass(event)
-        puts event.inspect
-      end
-
-      def on_fail(event)
-        puts event.inspect
-      end
-
-      def on_stop
-        puts "Stopping"
-      end
-    end
-
   def self.logger
     require 'log4r'
     include Log4r
@@ -31,22 +13,13 @@ module Torkify
     log
   end
 
-  def self.start
-    self.load_files
-
-    observers = ObserverSet.new
-    observers << Observer.new
-
-    Torkify.logger.info { 'Started torkify' }
-
-    reader = Reader.new
-    conductor = Conductor.new reader, observers
-    conductor.start
-
-    Torkify.logger.info { 'Stopping torkify' }
+  def self.listener(*args)
+    load_files
+    Listener.new(*args)
   end
 
   def self.load_files
+    require 'torkify/listener'
     require 'torkify/reader'
     require 'torkify/exceptions'
     require 'torkify/event_parser'

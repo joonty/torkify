@@ -37,33 +37,37 @@ module Torkify
 
       its(:length) { should == 1 }
 
-      it "should call the pass method on the observer with dispatch" do
-        event = Torkify::PassOrFailEvent.new 'pass', *(1..6)
-        @observer.should_receive(:on_pass).with(event)
-        @set.dispatch(event)
+      context "with a pass event" do
+        before { @event = Torkify::PassOrFailEvent.new 'pass', 1, [], 3, 4, 5, 6 }
+        it "should call the pass method on the observer with dispatch" do
+          @observer.should_receive(:on_pass).with(@event)
+          @set.dispatch(@event)
+        end
       end
 
-      it "should call the fail method on the observer with dispatch" do
-        event = Torkify::PassOrFailEvent.new 'fail', *(1..6)
-        @observer.should_receive(:on_fail).with(event)
-        @set.dispatch(event)
-      end
+      context "with a fail event" do
+        before do
+          @event = Torkify::PassOrFailEvent.new 'fail', 1, [], 3, 4, 5, 6
+        end
 
-      it "should not raise an error on dispatch with unknown method" do
-        event = Torkify::PassOrFailEvent.new 'fail', *(1..6)
-        expect { @set.dispatch(event) }.not_to raise_error
-      end
+        it "should call the fail method on the observer with dispatch" do
+          @observer.should_receive(:on_fail).with(@event)
+          @set.dispatch(@event)
+        end
 
-      it "should not raise an error on dispatch to method with wrong number of parameters" do
-        event = Torkify::PassOrFailEvent.new 'fail', *(1..6)
-        def @observer.on_fail; end
-        expect { @set.dispatch(event) }.not_to raise_error
-      end
+        it "should not raise an error on dispatch with unknown method" do
+          expect { @set.dispatch(@event) }.not_to raise_error
+        end
 
-      it "should not raise an error on dispatch to method that raises an exception" do
-        event = Torkify::PassOrFailEvent.new 'fail', *(1..6)
-        @observer.should_receive(:on_fail).and_raise(RuntimeError)
-        expect { @set.dispatch(event) }.not_to raise_error
+        it "should not raise an error on dispatch to method with wrong number of parameters" do
+          def @observer.on_fail; end
+          expect { @set.dispatch(@event) }.not_to raise_error
+        end
+
+        it "should not raise an error on dispatch to method that raises an exception" do
+          @observer.should_receive(:on_fail).and_raise(RuntimeError)
+          expect { @set.dispatch(@event) }.not_to raise_error
+        end
       end
     end
 
@@ -73,7 +77,7 @@ module Torkify
       its(:length) { should == 3 }
 
       it "should call the pass method on every observer with dispatch" do
-        event = Torkify::PassOrFailEvent.new 'pass', *(1..6)
+        event = Torkify::PassOrFailEvent.new 'pass', 1, [], 3, 4, 5, 6
         @set.each { |o| o.should_receive(:on_pass).with(event) }
         @set.dispatch(event)
       end

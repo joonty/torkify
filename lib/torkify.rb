@@ -9,6 +9,7 @@ module Torkify
     unless log
       log = Logger.new 'torkify'
       log.outputters = Outputter.stdout
+      log.level = INFO
     end
     log
   end

@@ -21,6 +21,7 @@ module Torkify
       its(:log_file) { should == @log_file }
       its(:worker)   { should == @worker }
       its(:to_s)     { should == 'TEST file' }
+      its(:message)  { should == :on_test }
 
       context "with line numbers" do
         before { @lines = [1, 5, 12] }

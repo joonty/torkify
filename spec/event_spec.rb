@@ -12,6 +12,7 @@ module Torkify
 
       its(:type) { should == 'absorb' }
       its(:to_s) { should == 'absorb' }
+      its(:message) { should == :on_absorb }
     end
   end
 end

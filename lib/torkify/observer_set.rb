@@ -15,9 +15,8 @@ module Torkify
     # 'on_test'.
     def dispatch(event)
       Torkify.logger.debug event.to_s
-      message = "on_#{event.type}".to_sym
       @set.each do |observer|
-        dispatch_each observer, message, event
+        dispatch_each observer, event.message, event
       end
     end
 

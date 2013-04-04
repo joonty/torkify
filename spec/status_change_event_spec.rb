@@ -19,6 +19,7 @@ module Torkify
       its(:file)  { should == @file }
       its(:event) { should == @inner_event }
       its(:to_s)  { should == 'PASS NOW FAIL file' }
+      its(:message)  { should == :on_pass_now_fail }
     end
 
     context "with a fail_now_pass event" do
@@ -35,6 +36,7 @@ module Torkify
       its(:file)  { should == @file }
       its(:event) { should == @inner_event }
       its(:to_s)  { should == 'FAIL NOW PASS file' }
+      its(:message)  { should == :on_fail_now_pass }
     end
   end
 end

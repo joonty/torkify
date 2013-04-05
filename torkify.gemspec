@@ -7,10 +7,10 @@ Gem::Specification.new do |gem|
   gem.name          = "torkify"
   gem.version       = Torkify::VERSION
   gem.authors       = ["Jon Cairns"]
-  gem.email         = ["jon@ggapps.co.uk"]
-  gem.description   = %q{Easily hook up events to automated testing with tork}
-  gem.summary       = %q{Torkify allows you to execute code after tests run, when using tork. You can create listeners which are called when tests are run and completed, allowing you to easily execute code and call system programs.}
-  gem.homepage      = ""
+  gem.email         = ["jon@joncairns.com"]
+  gem.description   = %q{Easily create callbacks for automated testing with tork}
+  gem.summary       = %q{Torkify allows you to execute code after tests run, when using the tork gem for automated testing. You can create listeners which are called when tests are run, and when they fail or pass. This allows you to easily execute code and call system programs.}
+  gem.homepage      = "https://github.com/joonty/torkify"
 
   gem.add_dependency 'json', '~> 1.7.7'
   gem.add_dependency 'log4r', '~> 1.1.10'

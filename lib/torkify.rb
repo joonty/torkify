@@ -37,18 +37,4 @@ module Torkify
     end
     log
   end
-
-  # Load all required files.
-  def self.load_files
-    require 'torkify/listener'
-    require 'torkify/reader'
-    require 'torkify/exceptions'
-    require 'torkify/event_parser'
-    require 'torkify/conductor'
-    require 'torkify/observer_set'
-    require 'torkify/events/event'
-    require 'torkify/events/test_event'
-    require 'torkify/events/pass_or_fail_event'
-    require 'torkify/events/status_change_event'
-  end
 end

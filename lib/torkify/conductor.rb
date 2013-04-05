@@ -16,13 +16,13 @@ module Torkify
     #
     # Parse each line and dispatch it as an event object to all observers.
     def start(reader)
-      dispatch Event.new 'start'
+      dispatch Event.new 'startup'
       parser = EventParser.new
         reader.each_line do |line|
           event = parser.parse line
           dispatch event
         end
-      dispatch Event.new 'stop'
+      dispatch Event.new 'shutdown'
     end
 
     protected

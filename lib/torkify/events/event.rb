@@ -7,7 +7,8 @@ module Torkify
   # Types:
   #
   #  - absorb
-  #  - stop
+  #  - shutdown
+  #  - startup
   #  - anything else...
   class Event < Struct.new(:type)
     include EventMessage

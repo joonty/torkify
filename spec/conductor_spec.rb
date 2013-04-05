@@ -32,12 +32,12 @@ module Torkify
       before do
         @conductor.observers += [double, double]
         @conductor.observers.each do |o|
-          o.should_receive(:on_start)
-          o.should_receive(:on_stop)
+          o.should_receive(:on_startup)
+          o.should_receive(:on_shutdown)
         end
       end
 
-      it "should call start and stop on each observer and each_line on reader" do
+      it "should call startup and shutdown on each observer and each_line on reader" do
         @reader.should_receive(:each_line)
         @conductor.start @reader
       end
@@ -52,9 +52,9 @@ module Torkify
 
       it "should notify each observer about the test event" do
         @conductor.observers.each do |o|
-          o.should_receive(:on_start)
+          o.should_receive(:on_startup)
           o.should_receive(:on_test)
-          o.should_receive(:on_stop)
+          o.should_receive(:on_shutdown)
         end
         @conductor.start @reader
       end

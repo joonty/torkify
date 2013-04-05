@@ -20,8 +20,8 @@ module Torkify
     # The object will be notified of events if it contains the following
     # methods:
     #
-    #  - on_start(event)         - when torkify starts
-    #  - on_stop(event)          - when torkify shuts down
+    #  - on_startup(event)       - when torkify starts
+    #  - on_shutdown(event)      - when torkify shuts down
     #  - on_test(event)          - when a test is started
     #  - on_pass(event)          - when a test passes
     #  - on_fail(event)          - when a test fails

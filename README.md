@@ -58,6 +58,8 @@ listener.start  # connect to tork and pass all events to the observer(s)
 
 Your observer classes can define any number of the following methods:
 
+ * `on_startup`: when torkify starts
+ * `on_shutdown`: when torkify shuts down
  * `on_test`: when a test is started
  * `on_pass`: when a test passes
  * `on_fail`: when a test fails
@@ -181,12 +183,12 @@ class MyObserver
     event.type      #=> "absorb"
   end
 
-  def on_start(event)
-    event.type      #=> "start"
+  def on_startup(event)
+    event.type      #=> "startup"
   end
 
-  def on_stop(event)
-    event.type      #=> "stop"
+  def on_shutdown(event)
+    event.type      #=> "shutdown"
   end
 end
 ```

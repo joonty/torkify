@@ -85,7 +85,7 @@ module Torkify
         require 'tork/config'
         require 'tork/cliapp'
 
-        $0 = Dir.basename Dir.pwd
+        $0 = File.basename Dir.pwd
         Tork::CLIApp.new.loop
       end
     end

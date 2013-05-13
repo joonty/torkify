@@ -42,7 +42,7 @@ module Torkify
       method = observer.method(message)
       observer.send message, *method_args(method, event)
     rescue NameError
-      Torkify.logger.warn { "No method #{message} defined on #{observer.inspect}" }
+      Torkify.logger.debug { "No method #{message} defined on #{observer.inspect}" }
     rescue => e
       Torkify.logger.error { "Caught exception from #{observer} during ##{message}: #{e}" }
     end

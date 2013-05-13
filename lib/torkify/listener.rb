@@ -72,19 +72,21 @@ module Torkify
     # Start the torkify listener and tork itself.
     #
     # It forks the current process and runs torkify as the child. It then
-    # runs tork as the main process, allowing for stdin to be passed to tork.
+    # runs the tork CLI as the main process, allowing for stdin to be passed to tork.
     #
     # Calls #start_loop().
-    #
-    # The command to run tork can be passed as an argument, and the
-    # TORK_CONFIGS environment variable can be passed as the second argument.
-    def start_with_tork(command = 'tork', tork_env = 'default')
+    def start_with_tork(command = 'tork')
       if fork
         start_loop
       else
         # Run tork in main process to keep stdin
         Torkify.logger.info { "Starting tork" }
-        exec({'TORK_CONFIGS' => tork_env}, command)
+
+        require 'tork/config'
+        require 'tork/cliapp'
+
+        $0 = Dir.basename Dir.pwd
+        Tork::CLIApp.new.loop
       end
     end
   end

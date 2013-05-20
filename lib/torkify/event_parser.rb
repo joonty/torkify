@@ -29,7 +29,7 @@ module Torkify
       when /^(pass_now_fail|fail_now_pass)$/
         StatusChangeEvent.new(data[0], data[1], event_from_data(data[2]))
       else
-        Event.new(*data)
+        Event.new(data.first)
       end
     end
   end

@@ -14,7 +14,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'json', '~> 1.7.7'
   gem.add_dependency 'log4r', '~> 1.1.10'
-  gem.add_dependency 'tork', '~> 19.2.1'
+  gem.add_dependency 'tork', '~> 19.2'
 
   gem.add_development_dependency 'rspec', '~> 2.13.0'
   gem.add_development_dependency 'rake', '~> 10.0.3'

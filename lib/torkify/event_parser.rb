@@ -56,6 +56,7 @@ module Torkify
 
     def echo_aliases
       { 'a' => 'run_all_test_files',
+        ''  => 'run_test_files',
         't' => 'run_test_file',
         's' => 'stop_running_test_files',
         'k' => 'stop_running_test_files',

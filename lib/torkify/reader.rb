@@ -12,10 +12,10 @@ module Torkify
     # has been written to the command's STDERR stream.
     def initialize(command = 'tork-remote tork-engine', run_in_dir = Dir.pwd)
       Dir.chdir(run_in_dir) do
-        _, @io, stderr, _ = Open3.popen3 command
+        self.in, self.out, self.err, self.thread = Open3.popen3 command
 
-        if @io.eof?
-          raise TorkError, stderr.read.strip
+        if out.eof?
+          raise TorkError, err.read.strip
         end
       end
     end
@@ -24,12 +24,14 @@ module Torkify
     #
     # This allows this class to be used in an IO like way.
     def method_missing(method, *args, &blk)
-      @io.send method, *args, &blk
+      out.send method, *args, &blk
     end
 
     # Allow respond_to? to work with method_missing.
     def respond_to?(method, include_private = false)
-      @io.respond_to? method, include_private
+      out.respond_to? method, include_private
     end
+  protected
+    attr_accessor :in, :out, :err, :thread
   end
 end

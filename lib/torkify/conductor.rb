@@ -20,12 +20,10 @@ module Torkify
       parser = EventParser.new
 
       while line = reader.gets
+        Torkify.logger.debug { "Read line: #{line}" }
         events = parser.parse line
         dispatch(*events)
       end
-
-      Torkify.logger.debug { "EOF? #{reader.eof?.inspect}" }
-      Torkify.logger.debug { "Closed? #{reader.closed?.inspect}" }
 
       dispatch Event.new 'shutdown'
     end

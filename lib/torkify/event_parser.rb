@@ -3,6 +3,7 @@ require_relative 'events/event'
 require_relative 'events/test_event'
 require_relative 'events/pass_or_fail_event'
 require_relative 'events/status_change_event'
+require_relative 'events/echo_event'
 
 module Torkify
 
@@ -23,14 +24,43 @@ module Torkify
     def event_from_data(data)
       case data.first
       when 'test'
-        TestEvent.new(*data)
+        [ TestEvent.new(*data) ]
       when /^(pass|fail)$/
-        PassOrFailEvent.new(*data)
+        [ PassOrFailEvent.new(*data) ]
       when /^(pass_now_fail|fail_now_pass)$/
-        StatusChangeEvent.new(data[0], data[1], event_from_data(data[2]))
+        [ StatusChangeEvent.new(data[0], data[1], event_from_data(data[2]).first) ]
+      when 'echo'
+        parse_echo_event data
       else
-        Event.new(data.first)
+        [ Event.new(data.first) ]
       end
+    end
+
+    def parse_echo_event(data)
+      events = []
+      events << EchoEvent.new(*data)
+      event = event_from_echo data[1].first
+      events << event if event
+      events
+    end
+
+    def event_from_echo(action)
+      if echo_aliases.has_key? action
+        Event.new echo_aliases[action]
+      elsif echo_aliases.has_value? action
+        Event.new action
+      else
+        nil
+      end
+    end
+
+    def echo_aliases
+      { 'a' => 'run_all_test_files',
+        't' => 'run_test_file',
+        's' => 'stop_running_test_files',
+        'k' => 'stop_running_test_files',
+        'p' => 'rerun_passed_test_files',
+        'f' => 'rerun_failed_test_files' }
     end
   end
 end

@@ -18,16 +18,21 @@ module Torkify
     def start(reader)
       dispatch Event.new 'startup'
       parser = EventParser.new
-        reader.each_line do |line|
-          event = parser.parse line
-          dispatch event
-        end
+
+      while line = reader.gets
+        events = parser.parse line
+        dispatch(*events)
+      end
+
+      Torkify.logger.debug { "EOF? #{reader.eof?.inspect}" }
+      Torkify.logger.debug { "Closed? #{reader.closed?.inspect}" }
+
       dispatch Event.new 'shutdown'
     end
 
     protected
-    def dispatch(event)
-      @observers.dispatch(event)
+    def dispatch(*events)
+      events.each { |e| @observers.dispatch(e) }
     end
   end
 end

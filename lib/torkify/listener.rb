@@ -76,18 +76,25 @@ module Torkify
     #
     # Calls #start_loop().
     def start_with_tork(command = 'tork')
+      load_tork
+
       if fork
         start_loop
       else
         # Run tork in main process to keep stdin
         Torkify.logger.info { "Starting tork" }
 
-        require 'tork/config'
-        require 'tork/cliapp'
-
         $0 = File.basename Dir.pwd
         Tork::CLIApp.new.loop
       end
+    end
+
+    def load_tork
+      require 'tork/config'
+      require 'tork/cliapp'
+    rescue LoadError
+      Torkify.logger.fatal { "Could not load tork: try running `gem install tork`" }
+      raise
     end
   end
 end

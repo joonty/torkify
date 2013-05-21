@@ -38,7 +38,7 @@ module Torkify
       end
 
       it "should call startup and shutdown on each observer and each_line on reader" do
-        @reader.should_receive(:each_line)
+        @reader.should_receive(:gets).and_return nil
         @conductor.start @reader
       end
     end
@@ -46,7 +46,7 @@ module Torkify
     context "when start is called with dummy input" do
       before do
         line = '["test","spec/status_change_event_spec.rb",[],"spec/status_change_event_spec.rb.log",0]'
-        @reader.should_receive(:each_line).and_yield(line)
+        @reader.should_receive(:gets).and_return(line, nil)
         @conductor.observers += [double, double]
       end
 

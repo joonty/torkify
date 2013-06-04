@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'torkify/events/status_change_event'
-require 'torkify/events/pass_or_fail_event'
+require 'torkify/event/status_change_event'
+require 'torkify/event/pass_or_fail_event'
 
-module Torkify
+module Torkify::Event
   describe StatusChangeEvent do
 
     context "with a pass_now_fail event" do

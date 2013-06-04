@@ -1,6 +1,6 @@
-require_relative 'event_message'
+require_relative 'message'
 
-module Torkify
+module Torkify::Event
 
   # Event used for test passes or failures.
   #
@@ -9,7 +9,7 @@ module Torkify
   #  - pass
   #  - fail
   class PassOrFailEvent < Struct.new(:type, :file, :lines, :log_file, :worker, :exit_code, :exit_info)
-    include EventMessage
+    include Message
 
     # Get the PID from the exit info.
     def pid

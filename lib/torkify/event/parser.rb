@@ -1,14 +1,14 @@
 require 'json'
-require_relative 'events/event'
-require_relative 'events/test_event'
-require_relative 'events/pass_or_fail_event'
-require_relative 'events/status_change_event'
-require_relative 'events/echo_event'
+require_relative 'event'
+require_relative 'test_event'
+require_relative 'pass_or_fail_event'
+require_relative 'status_change_event'
+require_relative 'echo_event'
 
-module Torkify
+module Torkify::Event
 
   # Parse raw strings passed by tork into event objects.
-  class EventParser
+  class Parser
 
     # Parse a raw string and return an object based on the event type.
     #

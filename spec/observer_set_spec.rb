@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'torkify/observer_set'
-require 'torkify/events/test_event'
-require 'torkify/events/pass_or_fail_event'
+require 'torkify/event/test_event'
+require 'torkify/event/pass_or_fail_event'
 
 module Torkify
   describe ObserverSet do
@@ -41,7 +41,7 @@ module Torkify
       its(:length) { should == 1 }
 
       context "with a pass event" do
-        before { @event = Torkify::PassOrFailEvent.new 'pass', 1, [], 3, 4, 5, 6 }
+        before { @event = Event::PassOrFailEvent.new 'pass', 1, [], 3, 4, 5, 6 }
         it "should call the pass method on the observer with dispatch" do
           @observer.should_receive(:on_pass).with(@event)
           @set.dispatch(@event)
@@ -50,7 +50,7 @@ module Torkify
 
       context "with a fail event" do
         before do
-          @event = Torkify::PassOrFailEvent.new 'fail', 1, [], 3, 4, 5, 6
+          @event = Event::PassOrFailEvent.new 'fail', 1, [], 3, 4, 5, 6
         end
 
         it "should call the fail method on the observer with dispatch" do
@@ -80,7 +80,7 @@ module Torkify
       its(:length) { should == 3 }
 
       it "should call the pass method on every observer with dispatch" do
-        event = Torkify::PassOrFailEvent.new 'pass', 1, [], 3, 4, 5, 6
+        event = Event::PassOrFailEvent.new 'pass', 1, [], 3, 4, 5, 6
         @set.each { |o| o.should_receive(:on_pass).with(event) }
         @set.dispatch(event)
       end

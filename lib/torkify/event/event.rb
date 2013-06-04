@@ -1,6 +1,6 @@
-require_relative 'event_message'
+require_relative 'message'
 
-module Torkify
+module Torkify::Event
 
   # Event used for all events that have no associated data.
   #
@@ -11,7 +11,7 @@ module Torkify
   #  - startup
   #  - anything else...
   class Event < Struct.new(:type)
-    include EventMessage
+    include Message
 
     def to_s
       type

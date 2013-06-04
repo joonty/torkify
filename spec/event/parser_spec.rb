@@ -1,9 +1,9 @@
 require 'spec_helper'
-require 'torkify/event_parser'
+require 'torkify/event/parser'
 
-module Torkify
-  describe EventParser do
-    before { @parser = EventParser.new }
+module Torkify::Event
+  describe Parser do
+    before { @parser = Parser.new }
 
     context "when calling parse on a test event line with no numbers" do
       before do

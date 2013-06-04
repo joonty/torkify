@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'torkify/events/echo_event'
+require 'torkify/event/echo_event'
 
-module Torkify
+module Torkify::Event
   describe EchoEvent do
 
     context "with a pass_now_fail event" do

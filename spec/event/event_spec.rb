@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'torkify/events/event'
+require 'torkify/event/event'
 
-module Torkify
+module Torkify::Event
   describe Event do
     context "when type is absorb" do
       before do

@@ -1,11 +1,12 @@
-require_relative 'event_message'
+require_relative 'message'
 
-module Torkify
+module Torkify::Event
+
   # Event used when a test is started.
   #
   # This is currently only one type: 'test'
   class TestEvent < Struct.new(:type, :file, :lines, :log_file, :worker)
-    include EventMessage
+    include Message
 
     def to_s
       s = "#{type.upcase} #{file}"

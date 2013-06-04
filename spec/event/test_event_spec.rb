@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'torkify/events/test_event'
+require 'torkify/event/test_event'
 
-module Torkify
+module Torkify::Event
   describe TestEvent do
 
     context "with typical seed data" do

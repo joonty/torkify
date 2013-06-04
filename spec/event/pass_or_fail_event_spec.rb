@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'torkify/events/pass_or_fail_event'
+require 'torkify/event/pass_or_fail_event'
 
-module Torkify
+module Torkify::Event
   describe PassOrFailEvent do
 
     context "with pass data" do

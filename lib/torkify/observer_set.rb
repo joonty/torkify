@@ -36,13 +36,15 @@ module Torkify
     alias :+ :|
     alias :union :|
 
-    private
+  private
     # Send the messages to a given observer, with the event object.
     def dispatch_each(observer, message, event)
       method = observer.method(message)
-      observer.send message, *method_args(method, event)
+      send_to_observer observer, message, method_args(method, event)
     rescue NameError
-      Torkify.logger.debug { "No method #{message} defined on #{observer.inspect}" }
+      send_to_observer(observer, message, [event]) do
+        Torkify.logger.debug { "No method #{message} defined on #{observer.inspect}" }
+      end
     rescue => e
       Torkify.logger.error { "Caught exception from #{observer} during ##{message}: #{e}" }
     end
@@ -57,6 +59,12 @@ module Torkify
         dispatch_args << event
       end
       dispatch_args
+    end
+
+    def send_to_observer(observer, message, args)
+      observer.send message, *args
+    rescue NoMethodError
+      yield if block_given?
     end
   end
 end

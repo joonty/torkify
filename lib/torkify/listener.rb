@@ -1,5 +1,4 @@
 require_relative 'conductor'
-require_relative 'observer_set'
 require_relative 'reader'
 require_relative 'exceptions'
 
@@ -12,7 +11,7 @@ module Torkify
     def initialize(command = 'tork-remote tork-engine', dir = Dir.pwd)
       @command = command
       @dir = dir
-      @conductor = Conductor.new ObserverSet.new
+      @conductor = Conductor.new Set.new
     end
 
     # Add an observer object to be notified of tork events.

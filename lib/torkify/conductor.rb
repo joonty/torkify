@@ -1,15 +1,22 @@
 require_relative 'event/event'
 require_relative 'event/parser'
+require_relative 'event/dispatcher'
 
 module Torkify
 
   # Connect the socket reader and observers, and dispatch events.
   class Conductor
-    attr_accessor :observers
-
     # Create with a set of observers.
     def initialize(observers)
-      @observers = observers
+      @dispatcher = Event::Dispatcher.new observers
+    end
+
+    def observers
+      @dispatcher.observers
+    end
+
+    def observers=(*args)
+      @dispatcher.send :observers=, *args
     end
 
     # Start reading from the reader, which is an IO-like object.
@@ -30,7 +37,7 @@ module Torkify
 
     protected
     def dispatch(*events)
-      events.each { |e| @observers.dispatch(e) }
+      @dispatcher.dispatch(*events)
     end
   end
 end

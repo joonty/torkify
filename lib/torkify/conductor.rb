@@ -37,7 +37,7 @@ module Torkify
 
     protected
     def dispatch(*events)
-      @dispatcher.dispatch(*events)
+      events.each { |event| @dispatcher.dispatch(event) }
     end
   end
 end

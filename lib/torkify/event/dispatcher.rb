@@ -17,8 +17,6 @@ module Torkify::Event
     end
 
   protected
-    #attr_reader :observers
-
     def observer_dispatch(observer, event)
       message = event.message
       observer_method = observer.method message

@@ -13,17 +13,22 @@ module Torkify::Event
   end
 
   describe Dispatcher do
+    shared_examples "an observer notification" do
+      it "should send the expected message to the observer" do
+        observers.each { |o| o.should_receive(expected_message).with(event) }
+        subject.dispatch event
+      end
+    end
+
     context "with a single observer" do
-      let(:observer) { mock }
-      subject { Dispatcher.new [observer] }
+      let(:observers) { [mock] }
+      subject { Dispatcher.new observers }
 
       context "dispatching an example event" do
         let(:event) { Event.new :example }
+        let(:expected_message) { :on_example }
 
-        it "should call on_example on the observer" do
-          observer.should_receive(:on_example).with(event)
-          subject.dispatch event
-        end
+        it_behaves_like "an observer notification"
       end
     end
 
@@ -33,11 +38,9 @@ module Torkify::Event
 
       context "dispatching an absorb event" do
         let(:event) { Event.new :absorb }
+        let(:expected_message) { :on_absorb }
 
-        it "should call on_absorb on the observer" do
-          observers.each { |o| o.should_receive(:on_absorb).with(event) }
-          subject.dispatch event
-        end
+        it_behaves_like "an observer notification"
       end
 
     end

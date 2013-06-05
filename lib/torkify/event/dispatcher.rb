@@ -48,7 +48,7 @@ module Torkify::Event
       def dispatch
         dispatch_and_rescue
       rescue => e
-        Torkify.logger.error { "Caught exception from observer #{o.inspect} during ##{event.message}: #{e}" }
+        Torkify.logger.error { "Caught exception from observer #{observer.inspect} during ##{event.message}: #{e}" }
       end
 
     protected
@@ -64,7 +64,7 @@ module Torkify::Event
       def send_and_trap(args)
         observer.send event.message, *args
       rescue NoMethodError
-        Torkify.logger.debug { "No method #{message} defined on #{observer.inspect}" }
+        Torkify.logger.debug { "No method #{event.message} defined on #{observer.inspect}" }
       end
 
       def arguments_for_event_message

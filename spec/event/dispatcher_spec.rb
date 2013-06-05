@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'torkify/event/dispatcher'
 require 'torkify/event/basic_event'
+require 'torkify/event/pass_or_fail_event'
 
 module Torkify::Event
 
@@ -64,6 +65,7 @@ module Torkify::Event
 
         it_behaves_like "an observer notification"
       end
+
     end
 
     context "with a concrete observer" do
@@ -103,6 +105,54 @@ module Torkify::Event
         let(:expected_call) { [:on_unknown, event] }
 
         it_behaves_like "an observer with a called method"
+      end
+
+      context "dispatching a run all test files event" do
+        let(:event) { BasicEvent.new :run_all_test_files }
+        let(:expected_call) { [:on_run_all_test_files, event] }
+
+        before { dispatcher.dispatch event }
+
+        it_behaves_like "an observer with a called method"
+
+        context "after sending the idle event" do
+          before { dispatcher.dispatch BasicEvent.new :idle }
+
+          subject { observers.first.received }
+
+          its(:first) { should == :on_ran_all_test_files }
+
+          context "the event" do
+            subject { observers.first.received[1] }
+            it { should be_a RanAllTestFilesEvent }
+            its(:passed) { should == [] }
+            its(:failed) { should == [] }
+            its(:time) { should > 0.0 }
+          end
+        end
+
+        context "after sending several pass and fail events" do
+          let(:pass_events) { Array.new(3) { PassOrFailEvent.new(:pass) } }
+          let(:fail_events) { Array.new(3) { PassOrFailEvent.new(:fail) } }
+
+          before do
+            pass_events.each { |e| dispatcher.dispatch e }
+            fail_events.each { |e| dispatcher.dispatch e }
+            dispatcher.dispatch BasicEvent.new :idle
+          end
+
+          subject { observers.first.received }
+
+          its(:first) { should == :on_ran_all_test_files }
+
+          context "the event" do
+            subject { observers.first.received[1] }
+            it { should be_a RanAllTestFilesEvent }
+            its(:passed) { should == pass_events }
+            its(:failed) { should == fail_events }
+            its(:time) { should > 0.0 }
+          end
+        end
       end
     end
 

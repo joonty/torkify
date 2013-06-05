@@ -19,7 +19,7 @@ module Torkify::Event
       event_from_data raw
     end
 
-    protected
+  protected
     # Create an event object from the array of data.
     def event_from_data(data)
       case data.first

@@ -1,4 +1,4 @@
-require_relative 'event/event'
+require_relative 'event/basic_event'
 require_relative 'event/parser'
 require_relative 'event/dispatcher'
 
@@ -23,7 +23,7 @@ module Torkify
     #
     # Parse each line and dispatch it as an event object to all observers.
     def start(reader)
-      dispatch Event::Event.new 'startup'
+      dispatch Event::BasicEvent.new 'startup'
       parser = Event::Parser.new
 
       while line = reader.gets
@@ -32,7 +32,7 @@ module Torkify
         dispatch(*events)
       end
 
-      dispatch Event::Event.new 'shutdown'
+      dispatch Event::BasicEvent.new 'shutdown'
     end
 
     protected

@@ -1,5 +1,5 @@
 require 'json'
-require_relative 'event'
+require_relative 'basic_event'
 require_relative 'test_event'
 require_relative 'pass_or_fail_event'
 require_relative 'status_change_event'
@@ -32,7 +32,7 @@ module Torkify::Event
       when 'echo'
         parse_echo_event data
       else
-        [ Event.new(data.first) ]
+        [ BasicEvent.new(data.first) ]
       end
     end
 
@@ -46,9 +46,9 @@ module Torkify::Event
 
     def event_from_echo(action)
       if echo_aliases.has_key? action
-        Event.new echo_aliases[action]
+        BasicEvent.new echo_aliases[action]
       elsif echo_aliases.has_value? action
-        Event.new action
+        BasicEvent.new action
       else
         nil
       end

@@ -82,7 +82,7 @@ module Torkify::Event
 
       subject { @event_list.first }
 
-      it { should be_an Event }
+      it { should be_an BasicEvent }
       its(:type) { should == 'absorb' }
     end
 
@@ -94,7 +94,7 @@ module Torkify::Event
 
       subject { @event_list.first }
 
-      it { should be_an Event }
+      it { should be_an BasicEvent }
       its(:type) { should == 'random' }
     end
 
@@ -163,7 +163,7 @@ module Torkify::Event
       context "the first event" do
         subject { @event_list.first }
 
-        it { should be_an Event }
+        it { should be_an BasicEvent }
 
         its(:type) { should == 'idle' }
       end
@@ -210,7 +210,7 @@ module Torkify::Event
       context "the second event" do
         subject { @event_list[1] }
 
-        it { should be_an Event }
+        it { should be_an BasicEvent }
 
         its(:type) { should == 'run_all_test_files' }
       end
@@ -237,7 +237,7 @@ module Torkify::Event
       context "the second event" do
         subject { @event_list[1] }
 
-        it { should be_an Event }
+        it { should be_an BasicEvent }
 
         its(:type) { should == 'run_all_test_files' }
       end
@@ -265,7 +265,7 @@ module Torkify::Event
       context "the second event" do
         subject { @event_list[1] }
 
-        it { should be_an Event }
+        it { should be_an BasicEvent }
 
         its(:type) { should == 'run_test_file' }
       end
@@ -292,7 +292,7 @@ module Torkify::Event
       context "the second event" do
         subject { @event_list[1] }
 
-        it { should be_an Event }
+        it { should be_an BasicEvent }
 
         its(:type) { should == 'run_test_file' }
       end
@@ -320,7 +320,7 @@ module Torkify::Event
       context "the second event" do
         subject { @event_list[1] }
 
-        it { should be_an Event }
+        it { should be_an BasicEvent }
 
         its(:type) { should == 'stop_running_test_files' }
       end
@@ -347,7 +347,7 @@ module Torkify::Event
       context "the second event" do
         subject { @event_list[1] }
 
-        it { should be_an Event }
+        it { should be_an BasicEvent }
 
         its(:type) { should == 'stop_running_test_files' }
       end
@@ -375,7 +375,7 @@ module Torkify::Event
       context "the second event" do
         subject { @event_list[1] }
 
-        it { should be_an Event }
+        it { should be_an BasicEvent }
 
         its(:type) { should == 'rerun_passed_test_files' }
       end
@@ -402,7 +402,7 @@ module Torkify::Event
       context "the second event" do
         subject { @event_list[1] }
 
-        it { should be_an Event }
+        it { should be_an BasicEvent }
 
         its(:type) { should == 'rerun_passed_test_files' }
       end
@@ -430,7 +430,7 @@ module Torkify::Event
       context "the second event" do
         subject { @event_list[1] }
 
-        it { should be_an Event }
+        it { should be_an BasicEvent }
 
         its(:type) { should == 'rerun_failed_test_files' }
       end
@@ -457,7 +457,7 @@ module Torkify::Event
       context "the second event" do
         subject { @event_list[1] }
 
-        it { should be_an Event }
+        it { should be_an BasicEvent }
 
         its(:type) { should == 'rerun_failed_test_files' }
       end

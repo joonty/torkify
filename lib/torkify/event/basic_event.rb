@@ -10,7 +10,7 @@ module Torkify::Event
   #  - shutdown
   #  - startup
   #  - anything else...
-  class Event < Struct.new(:type)
+  class BasicEvent < Struct.new(:type)
     include Message
 
     def to_s

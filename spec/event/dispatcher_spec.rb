@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'torkify/event/dispatcher'
-require 'torkify/event/event'
+require 'torkify/event/basic_event'
 
 module Torkify::Event
 
@@ -52,14 +52,14 @@ module Torkify::Event
       subject { Dispatcher.new observers }
 
       context "dispatching an example event" do
-        let(:event) { Event.new :example }
+        let(:event) { BasicEvent.new :example }
         let(:expected_message) { :on_example }
 
         it_behaves_like "an observer notification"
       end
 
       context "dispatching a test event" do
-        let(:event) { Event.new :test }
+        let(:event) { BasicEvent.new :test }
         let(:expected_message) { :on_test }
 
         it_behaves_like "an observer notification"
@@ -71,35 +71,35 @@ module Torkify::Event
       let(:dispatcher) { Dispatcher.new observers }
 
       context "dispatching to a method that receives no arguments" do
-        let(:event) { Event.new :pass }
+        let(:event) { BasicEvent.new :pass }
         let(:expected_call) { [:on_pass] }
 
         it_behaves_like "an observer with a called method"
       end
 
       context "dispatching to a method that receives one argument" do
-        let(:event) { Event.new :test }
+        let(:event) { BasicEvent.new :test }
         let(:expected_call) { [:on_test, event] }
 
         it_behaves_like "an observer with a called method"
       end
 
       context "dispatching to a method that receives two arguments" do
-        let(:event) { Event.new :fail }
+        let(:event) { BasicEvent.new :fail }
         let(:expected_call) { [:on_fail, event, nil] }
 
         it_behaves_like "an observer with a called method"
       end
 
       context "dispatching to a method that receives many arguments" do
-        let(:event) { Event.new :stop }
+        let(:event) { BasicEvent.new :stop }
         let(:expected_call) { [:on_stop, event, nil, nil, nil, nil, nil] }
 
         it_behaves_like "an observer with a called method"
       end
 
       context "dispatching to use method missing" do
-        let(:event) { Event.new :unknown }
+        let(:event) { BasicEvent.new :unknown }
         let(:expected_call) { [:on_unknown, event] }
 
         it_behaves_like "an observer with a called method"
@@ -113,7 +113,7 @@ module Torkify::Event
 
       context "dispatching an event" do
         it "should not raise an exception" do
-          expect { dispatcher.dispatch Event.new(:missing) }.not_to raise_error
+          expect { dispatcher.dispatch BasicEvent.new(:missing) }.not_to raise_error
         end
       end
     end
@@ -123,14 +123,14 @@ module Torkify::Event
       subject { Dispatcher.new observers }
 
       context "dispatching an absorb event" do
-        let(:event) { Event.new :absorb }
+        let(:event) { BasicEvent.new :absorb }
         let(:expected_message) { :on_absorb }
 
         it_behaves_like "an observer notification"
       end
 
       context "dispatching a fail event" do
-        let(:event) { Event.new :fail }
+        let(:event) { BasicEvent.new :fail }
         let(:expected_message) { :on_fail }
 
         it_behaves_like "an observer notification"

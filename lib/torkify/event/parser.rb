@@ -37,31 +37,34 @@ module Torkify::Event
     end
 
     def parse_echo_event(data)
-      events = []
-      events << EchoEvent.new(*data)
-      event = event_from_echo data[1].first
+      events = [ EchoEvent.new(*data) ]
+      event = event_from_echo(*data[1])
       events << event if event
       events
     end
 
-    def event_from_echo(action)
-      if echo_aliases.has_key? action
-        BasicEvent.new echo_aliases[action]
-      elsif echo_aliases.has_value? action
+    def event_from_echo(action, action_args = nil)
+      if echo_commands_requiring_args.include? action
+        return if action_args.nil? || action_args.empty?
+      end
+      if known_echo_commands.include? action
         BasicEvent.new action
-      else
-        nil
       end
     end
 
-    def echo_aliases
-      { 'a' => 'run_all_test_files',
-        ''  => 'run_test_files',
-        't' => 'run_test_file',
-        's' => 'stop_running_test_files',
-        'k' => 'stop_running_test_files',
-        'p' => 'rerun_passed_test_files',
-        'f' => 'rerun_failed_test_files' }
+    def known_echo_commands
+      [ 'run_all_test_files',
+        'run_test_files',
+        'run_test_file',
+        'stop_running_test_files',
+        'stop_running_test_files',
+        'rerun_passed_test_files',
+        'rerun_failed_test_files' ]
+    end
+
+    def echo_commands_requiring_args
+      [ 'run_test_files',
+        'run_test_file' ]
     end
   end
 end

@@ -210,14 +210,35 @@ module Torkify::Event
     end
 
     context "when calling parse on an echo line for the run_test_files command" do
-      before do
-        line = '["echo", ["run_test_files"]]'
-        @event_list = @parser.parse line
+      context "with no arguments" do
+        before do
+          line = '["echo", ["run_test_files", []]]'
+          @event_list = @parser.parse line
+        end
+
+        subject { @event_list }
+
+        its(:length) { should == 1 }
+
+        context "the first event" do
+          subject { @event_list.first }
+
+          it_behaves_like "an echo event", ['run_test_files', []]
+        end
       end
 
-      subject { @event_list }
+      context "with files as arguments" do
+        before do
+          line = '["echo", ["run_test_files", ["path/to/file1.rb", "path/to/file2.rb"]]]'
+          @event_list = @parser.parse line
+        end
 
-      it_behaves_like "an echo event and sub event", 'run_test_files'
+        subject { @event_list }
+
+        it_behaves_like "an echo event and sub event",
+                        'run_test_files',
+                        ["run_test_files", ["path/to/file1.rb", "path/to/file2.rb"]]
+      end
     end
 
     context "when calling parse on an echo line for the run_test_file command" do

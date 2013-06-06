@@ -2,6 +2,33 @@ require 'spec_helper'
 require 'torkify/event/parser'
 
 module Torkify::Event
+  shared_examples "a basic event" do |type|
+    it { should be_an BasicEvent }
+    its(:type) { should == type }
+  end
+
+  shared_examples "an echo event" do |args|
+    it { should be_an EchoEvent }
+    its(:type) { should == 'echo' }
+    its(:args) { should == args }
+  end
+
+  shared_examples "an echo event and sub event" do |type, echo_args = nil|
+    its(:length) { should == 2 }
+
+    context "the first event" do
+      subject { @event_list.first }
+
+      it_behaves_like "an echo event", (echo_args || [type])
+    end
+
+    context "the second event" do
+      subject { @event_list[1] }
+
+      it_behaves_like "a basic event", type
+    end
+  end
+
   describe Parser do
     before { @parser = Parser.new }
 
@@ -82,8 +109,7 @@ module Torkify::Event
 
       subject { @event_list.first }
 
-      it { should be_an BasicEvent }
-      its(:type) { should == 'absorb' }
+      it_behaves_like "a basic event", 'absorb'
     end
 
     context "when calling parse on an unknown event type" do
@@ -94,8 +120,7 @@ module Torkify::Event
 
       subject { @event_list.first }
 
-      it { should be_an BasicEvent }
-      its(:type) { should == 'random' }
+      it_behaves_like "a basic event", 'random'
     end
 
     context "when calling parse on a pass now fail event line" do
@@ -163,9 +188,7 @@ module Torkify::Event
       context "the first event" do
         subject { @event_list.first }
 
-        it { should be_an BasicEvent }
-
-        its(:type) { should == 'idle' }
+        it_behaves_like "a basic event", 'idle'
       end
     end
 
@@ -182,233 +205,55 @@ module Torkify::Event
       context "the first event" do
         subject { @event_list.first }
 
-        it { should be_an EchoEvent }
-
-        its(:type) { should == 'echo' }
+        it_behaves_like "an echo event", ['idle']
       end
     end
 
-    context "when calling parse on an echo line for a run_all_test_files event" do
+    context "when calling parse on an echo line for the run_test_files command" do
       before do
-        line = '["echo",["run_all_test_files"]]'
+        line = '["echo", ["run_test_files"]]'
         @event_list = @parser.parse line
       end
 
       subject { @event_list }
 
-      its(:length) { should == 2 }
-
-      context "the first event" do
-        subject { @event_list.first }
-
-        it { should be_an EchoEvent }
-
-        its(:type) { should == 'echo' }
-        its(:args) { should == ['run_all_test_files'] }
-      end
-
-      context "the second event" do
-        subject { @event_list[1] }
-
-        it { should be_an BasicEvent }
-
-        its(:type) { should == 'run_all_test_files' }
-      end
+      it_behaves_like "an echo event and sub event", 'run_test_files'
     end
 
-    context "when calling parse on an echo line for the run_all_test_files user command" do
+    context "when calling parse on an echo line for the run_test_file command" do
       before do
-        line = '["echo", ["a"]]'
+        line = '["echo", ["run_test_file", "path/to/file.rb"]]'
         @event_list = @parser.parse line
       end
 
       subject { @event_list }
 
-      its(:length) { should == 2 }
-
-      context "the first event" do
-        subject { @event_list.first }
-
-        it { should be_an EchoEvent }
-
-        its(:type) { should == 'echo' }
-      end
-
-      context "the second event" do
-        subject { @event_list[1] }
-
-        it { should be_an BasicEvent }
-
-        its(:type) { should == 'run_all_test_files' }
-      end
+      it_behaves_like "an echo event and sub event", 'run_test_file', ['run_test_file', 'path/to/file.rb']
     end
 
-    context "when calling parse on an echo line for a run_test_file event" do
+    context "when calling parse on an echo line for the run_test_file command" do
       before do
-        line = '["echo",["run_test_file", "path/to/file.rb"]]'
+        line = '["echo", ["stop_running_test_files"]]'
         @event_list = @parser.parse line
       end
 
       subject { @event_list }
 
-      its(:length) { should == 2 }
-
-      context "the first event" do
-        subject { @event_list.first }
-
-        it { should be_an EchoEvent }
-
-        its(:type) { should == 'echo' }
-        its(:args) { should == ['run_test_file', 'path/to/file.rb'] }
-      end
-
-      context "the second event" do
-        subject { @event_list[1] }
-
-        it { should be_an BasicEvent }
-
-        its(:type) { should == 'run_test_file' }
-      end
+      it_behaves_like "an echo event and sub event", 'stop_running_test_files'
     end
 
-    context "when calling parse on an echo line for the run_test_file user command" do
+    context "when calling parse on an echo line for the rerun_passed_test_files command" do
       before do
-        line = '["echo", ["t", "path/to/file.rb"]]'
+        line = '["echo", ["rerun_passed_test_files"]]'
         @event_list = @parser.parse line
       end
 
       subject { @event_list }
 
-      its(:length) { should == 2 }
-
-      context "the first event" do
-        subject { @event_list.first }
-
-        it { should be_an EchoEvent }
-
-        its(:type) { should == 'echo' }
-      end
-
-      context "the second event" do
-        subject { @event_list[1] }
-
-        it { should be_an BasicEvent }
-
-        its(:type) { should == 'run_test_file' }
-      end
+      it_behaves_like "an echo event and sub event", 'rerun_passed_test_files'
     end
 
-    context "when calling parse on an echo line for a stop_running_test_files event" do
-      before do
-        line = '["echo",["stop_running_test_files"]]'
-        @event_list = @parser.parse line
-      end
-
-      subject { @event_list }
-
-      its(:length) { should == 2 }
-
-      context "the first event" do
-        subject { @event_list.first }
-
-        it { should be_an EchoEvent }
-
-        its(:type) { should == 'echo' }
-        its(:args) { should == ['stop_running_test_files'] }
-      end
-
-      context "the second event" do
-        subject { @event_list[1] }
-
-        it { should be_an BasicEvent }
-
-        its(:type) { should == 'stop_running_test_files' }
-      end
-    end
-
-    context "when calling parse on an echo line for the run_test_file user command" do
-      before do
-        line = '["echo", ["s"]]'
-        @event_list = @parser.parse line
-      end
-
-      subject { @event_list }
-
-      its(:length) { should == 2 }
-
-      context "the first event" do
-        subject { @event_list.first }
-
-        it { should be_an EchoEvent }
-
-        its(:type) { should == 'echo' }
-      end
-
-      context "the second event" do
-        subject { @event_list[1] }
-
-        it { should be_an BasicEvent }
-
-        its(:type) { should == 'stop_running_test_files' }
-      end
-    end
-
-    context "when calling parse on an echo line for a rerun_passed_test_files event" do
-      before do
-        line = '["echo",["rerun_passed_test_files"]]'
-        @event_list = @parser.parse line
-      end
-
-      subject { @event_list }
-
-      its(:length) { should == 2 }
-
-      context "the first event" do
-        subject { @event_list.first }
-
-        it { should be_an EchoEvent }
-
-        its(:type) { should == 'echo' }
-        its(:args) { should == ['rerun_passed_test_files'] }
-      end
-
-      context "the second event" do
-        subject { @event_list[1] }
-
-        it { should be_an BasicEvent }
-
-        its(:type) { should == 'rerun_passed_test_files' }
-      end
-    end
-
-    context "when calling parse on an echo line for the rerun_passed_test_files user command" do
-      before do
-        line = '["echo", ["p"]]'
-        @event_list = @parser.parse line
-      end
-
-      subject { @event_list }
-
-      its(:length) { should == 2 }
-
-      context "the first event" do
-        subject { @event_list.first }
-
-        it { should be_an EchoEvent }
-
-        its(:type) { should == 'echo' }
-      end
-
-      context "the second event" do
-        subject { @event_list[1] }
-
-        it { should be_an BasicEvent }
-
-        its(:type) { should == 'rerun_passed_test_files' }
-      end
-    end
-
-    context "when calling parse on an echo line for a rerun_failed_test_files event" do
+    context "when calling parse on an echo line for a rerun_failed_test_files command" do
       before do
         line = '["echo",["rerun_failed_test_files"]]'
         @event_list = @parser.parse line
@@ -416,51 +261,7 @@ module Torkify::Event
 
       subject { @event_list }
 
-      its(:length) { should == 2 }
-
-      context "the first event" do
-        subject { @event_list.first }
-
-        it { should be_an EchoEvent }
-
-        its(:type) { should == 'echo' }
-        its(:args) { should == ['rerun_failed_test_files'] }
-      end
-
-      context "the second event" do
-        subject { @event_list[1] }
-
-        it { should be_an BasicEvent }
-
-        its(:type) { should == 'rerun_failed_test_files' }
-      end
-    end
-
-    context "when calling parse on an echo line for the rerun_failed_test_files user command" do
-      before do
-        line = '["echo", ["f"]]'
-        @event_list = @parser.parse line
-      end
-
-      subject { @event_list }
-
-      its(:length) { should == 2 }
-
-      context "the first event" do
-        subject { @event_list.first }
-
-        it { should be_an EchoEvent }
-
-        its(:type) { should == 'echo' }
-      end
-
-      context "the second event" do
-        subject { @event_list[1] }
-
-        it { should be_an BasicEvent }
-
-        its(:type) { should == 'rerun_failed_test_files' }
-      end
+      it_behaves_like "an echo event and sub event", 'rerun_failed_test_files'
     end
   end
 end

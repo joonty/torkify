@@ -25,9 +25,9 @@ module Torkify::Event
       case data.first
       when 'test'
         [ TestEvent.new(*data) ]
-      when /^(pass|fail)$/
+      when 'pass', 'fail'
         [ PassOrFailEvent.new(*data) ]
-      when /^(pass_now_fail|fail_now_pass)$/
+      when 'pass_now_fail', 'fail_now_pass'
         [ StatusChangeEvent.new(data[0], data[1], event_from_data(data[2]).first) ]
       when 'echo'
         parse_echo_event data

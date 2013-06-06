@@ -43,9 +43,9 @@ module Torkify::Event
       events
     end
 
-    def event_from_echo(action, action_args = nil)
+    def event_from_echo(action, *action_args)
       if echo_commands_requiring_args.include? action
-        return if action_args.nil? || action_args.empty?
+        return if action_args.empty? || action_args.first.empty?
       end
       if known_echo_commands.include? action
         BasicEvent.new action

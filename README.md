@@ -1,5 +1,7 @@
 # Torkify
 
+[![Build Status](https://travis-ci.org/joonty/torkify.png?branch=master)](https://travis-ci.org/joonty/torkify)
+
 Torkify integrates with [tork][1], which is a solution for automating tests as you change your source files.
 
 Torkify hooks in to tork's remote events, and allows you to write ruby code that's called when particular events fire. This makes it easy for you to write code that triggers cool stuff when your tests pass or fail.

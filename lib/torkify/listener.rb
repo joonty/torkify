@@ -1,3 +1,4 @@
+require 'set'
 require_relative 'conductor'
 require_relative 'reader'
 require_relative 'exceptions'

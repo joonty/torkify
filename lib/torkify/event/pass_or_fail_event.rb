@@ -17,9 +17,23 @@ module Torkify::Event
       matched.first.to_i if matched
     end
 
+    def errors
+      puts "Getting errors"
+      @errors ||= parse_errors_from_log
+    end
+
     def to_s
       s = "#{type.upcase} #{file}"
       s += lines.any? ? " (lines #{lines.join(', ')})" : ''
+    end
+
+  protected
+    def parse_errors_from_log
+      puts "Parsing #{log_file}"
+      log = File.open log_file
+      parser = Torkify::Log::Parser.new log
+      parser.parse
+      parser.errors
     end
   end
 end

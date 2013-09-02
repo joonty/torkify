@@ -1,6 +1,7 @@
 require_relative 'event/basic_event'
 require_relative 'event/parser'
 require_relative 'event/dispatcher'
+require_relative 'log/parser'
 
 module Torkify
 

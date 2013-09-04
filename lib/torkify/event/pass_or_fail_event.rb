@@ -18,7 +18,6 @@ module Torkify::Event
     end
 
     def errors
-      puts "Getting errors"
       @errors ||= parse_errors_from_log
     end
 
@@ -29,7 +28,6 @@ module Torkify::Event
 
   protected
     def parse_errors_from_log
-      puts "Parsing #{log_file}"
       log = File.open log_file
       parser = Torkify::Log::Parser.new log
       parser.parse

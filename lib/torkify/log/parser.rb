@@ -1,40 +1,9 @@
+require_relative 'test_error'
+require_relative 'log_reader'
+
 module Torkify::Log
   module Error; end
   class ParserError < StandardError; end
-
-  class TestError < Struct.new(:filename, :lnum, :text, :type)
-    def clean_text
-      text.strip
-    end
-  end
-
-  class LogReader
-    attr_reader :line
-
-    def initialize(stream)
-      @stream = stream
-      @line = stream.readline
-    end
-
-    def forward
-      self.line = stream.readline
-      self
-    end
-
-
-    def matcher
-      @matcher ||= LineMatcher.new(line)
-    end
-
-  protected
-    attr_reader :stream
-    attr_writer :line
-
-    def line=(line)
-      @line = line
-      @matcher = nil
-    end
-  end
 
   class Parser
     attr_reader :errors
@@ -86,7 +55,7 @@ module Torkify::Log
       if matches.length >= 3
         self.errors << TestError.new(matches.shift.strip,
                                      matches.shift.strip,
-                                     matches.join(':').strip,
+                                     matches.join(':').strip.gsub("'", "`"),
                                      'E')
       end
     end
@@ -99,7 +68,7 @@ module Torkify::Log
         end
 
         matches = reader.matcher.error_description
-        error.text << reader.line
+        error.text << reader.line.gsub("'", "`")
 
         if matches
           matches = matches.to_a
@@ -113,33 +82,4 @@ module Torkify::Log
 
   end
 
-  class LineMatcher
-    PATTERNS = {
-      'tork_load_line'        => /^Loaded suite tork[^\s]+\s(.+)/,
-      'error_description'     => /^[\s#]*([^:]+):([0-9]+):in/,
-      'tork_error_line'       => /^.+tork\/master\.rb:[0-9]+:in [^:]+:\s/,
-      'test_error_or_failure' => /^\s\s[0-9]+\)/,
-      'test_summary'          => /^([0-9]+\s[a-z]+,)+/,
-      'finished_line'         => /^Finished/
-    }
-
-    def initialize(line)
-      self.line = line
-    end
-
-    PATTERNS.each do |name, reg|
-      define_method("#{name}?") { !(line =~ PATTERNS[name]).nil? }
-      define_method("#{name}")  { PATTERNS[name].match(line) }
-    end
-
-    def end_of_errors?
-      test_summary? || finished_line?
-    end
-
-    alias :ruby_error :error_description
-    alias :ruby_error? :error_description?
-
-  protected
-    attr_accessor :line
-  end
 end

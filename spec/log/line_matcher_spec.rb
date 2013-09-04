@@ -19,7 +19,7 @@ module Torkify::Log
       context "calling error_description?" do
         subject { matcher.error_description? }
 
-        it { should be_false }
+        it { should be_true }
       end
     end
 

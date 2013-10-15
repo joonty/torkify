@@ -60,6 +60,15 @@ module Torkify::Log
       end
     end
 
+    def apply_file_from_matches(error, matches)
+      if matches
+        matches = matches.to_a
+        matches.shift
+        error.filename = matches.shift.strip
+        error.lnum = matches.shift.strip
+      end
+    end
+
     def parse_errors_or_failures
       until reader.matcher.end_of_errors?
         if reader.matcher.test_error_or_failure?
@@ -70,13 +79,15 @@ module Torkify::Log
         matches = reader.matcher.error_description
         error.text << reader.line.gsub("'", "`")
 
-        if matches
-          matches = matches.to_a
-          matches.shift
-          error.filename = matches.shift.strip
-          error.lnum = matches.shift.strip
-        end
+        apply_file_from_matches error, matches
         reader.forward
+      end
+
+      errors.each do |err|
+        if err.lnum == '0'
+          matches = error.text.match(LineMatcher::PATTERNS['file_extraction'])
+          apply_file_from_matches err, matches
+        end
       end
     end
 

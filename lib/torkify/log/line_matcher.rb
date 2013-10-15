@@ -4,8 +4,9 @@ module Torkify::Log
     PATTERNS = {
       'tork_load_line'        => /^Loaded suite tork[^\s]+\s(.+)/,
       'error_description'     => /^[\s#]*([^:]+):([0-9]+):in/,
+      'file_extraction'       => /\[([^:]+):([0-9]+)\]/m,
       'tork_error_line'       => /^.+tork\/master\.rb:[0-9]+:in [^:]+:\s/,
-      'test_error_or_failure' => /^\s\s[0-9]+\)/,
+      'test_error_or_failure' => /^\s+[0-9]+\)/,
       'test_summary'          => /^([0-9]+\s[a-z]+,)+/,
       'finished_line'         => /^Finished/
     }

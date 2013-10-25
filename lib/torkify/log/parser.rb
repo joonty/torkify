@@ -85,7 +85,7 @@ module Torkify::Log
 
       errors.each do |err|
         if err.lnum == '0'
-          matches = error.text.match(LineMatcher::PATTERNS['file_extraction'])
+          matches = err.text.match(LineMatcher::PATTERNS['file_extraction'])
           apply_file_from_matches err, matches
         end
       end

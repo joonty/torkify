@@ -1,4 +1,5 @@
 require "torkify/version"
+require 'log4r'
 
 # Listen to tork events and execute ruby code when they happen.
 #
@@ -15,6 +16,7 @@ require "torkify/version"
 #   # or listener.start_loop
 #   # or listener.start_with_tork
 module Torkify
+  include Log4r
 
   # Create a listener object and load all required files.
   def self.listener(*args)
@@ -26,9 +28,6 @@ module Torkify
   #
   # Uses Log4r.
   def self.logger
-    require 'log4r'
-    include Log4r
-
     log = Logger['torkify']
     unless log
       log = Logger.new 'torkify'

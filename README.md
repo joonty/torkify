@@ -2,9 +2,13 @@
 
 [![Build Status](https://travis-ci.org/joonty/torkify.png?branch=master)](https://travis-ci.org/joonty/torkify)
 
-Torkify integrates with [tork][1], which is a solution for automating tests as you change your source files.
+Torkify aims to be a one-stop shop for testing ruby applications, and handling callbacks after test execution for things like notifications.
 
-Torkify hooks in to tork's remote events, and allows you to write ruby code that's called when particular events fire. This makes it easy for you to write code that triggers cool stuff when your tests pass or fail.
+Torkify integrates with [tork][1], which is a solution for automating test execution, as you change your source files.
+
+Torkify hooks in to tork's remote events, and allows you to add gems and build callbacks that run when tests fail or pass. This makes it easy for you to write code that triggers cool stuff when your tests explode (your imagination is the limit).
+
+Plus, [tork][1] is a fantastic tool that makes it very easy to run tests immediately and automatically in a pre-loaded environment.
 
 ## An example
 

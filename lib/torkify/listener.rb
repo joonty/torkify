@@ -75,7 +75,7 @@ module Torkify
     # runs the tork CLI as the main process, allowing for stdin to be passed to tork.
     #
     # Calls #start_loop().
-    def start_with_tork(command = 'tork')
+    def start_with_tork
       load_tork
 
       if fork

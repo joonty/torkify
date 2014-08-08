@@ -83,13 +83,12 @@ module Torkify
       else
         # Run tork in main process to keep stdin
         Torkify.logger.info { "Starting tork" }
-
-        $0 = File.basename Dir.pwd
         Tork::CLIApp.new.loop
       end
     end
 
     def load_tork
+      TORK_DOLLAR_ZERO = File.basename(Dir.pwd)
       require 'tork/config'
       require 'tork/cliapp'
     rescue LoadError

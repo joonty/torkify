@@ -88,7 +88,7 @@ module Torkify
     end
 
     def load_tork
-      TORK_DOLLAR_ZERO = File.basename(Dir.pwd)
+      $0 = File.basename(Dir.pwd)
       require 'tork/config'
       require 'tork/cliapp'
     rescue LoadError

@@ -1,6 +1,10 @@
 require "torkify/version"
 require 'log4r'
 
+unless defined?(TORK_DOLLAR_ZERO)
+  TORK_DOLLAR_ZERO = $0
+end
+
 # Listen to tork events and execute ruby code when they happen.
 #
 # E.g.
